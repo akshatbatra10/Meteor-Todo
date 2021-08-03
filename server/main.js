@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
-import { TasksCollection } from '../imports/api/taskCollection';
+import { TasksCollection } from '/imports/api/TaskCollection.js';
 
 const insertTask = taskText => TasksCollection.insert({ text: taskText });
-
+ 
 Meteor.startup(() => {
-  if(TasksCollection.find().count() === 0) {
+  if (TasksCollection.find().count() === 0) {
     [
-      'Winning one million dollars',
-      'Spending one million dollars',
+      'Winning a million dollars',
+      'Spending a million dollars',
       'Going broke'
-    ].forEach(insertTask);
+    ].forEach(insertTask)
   }
 });
