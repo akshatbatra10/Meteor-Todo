@@ -20,7 +20,7 @@ Meteor.startup(() => {
     });
   }
 
-  const user = Meteor.findUserByUsername(SEED_USERNAME);
+  const user = Accounts.findUserByUsername(SEED_USERNAME);
 
   if (TasksCollection.find().count() === 0) {
     [

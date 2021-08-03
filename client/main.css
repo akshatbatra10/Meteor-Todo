@@ -146,6 +146,8 @@ header {
 }
 
 .login-form > div {
+  display: flex;
+  flex-direction: column;
   margin: 8px;
 }
 
@@ -170,5 +172,17 @@ header {
 }
 
 .login-form > div > button {
+  margin-top: 5px;
   background-color: #62807e;
+  width: 40%;
+  margin-left: 30%;
+}
+
+.user {
+  display: flex;
+
+  align-self: flex-end;
+
+  margin: 8px 16px 0;
+  font-weight: bold;
 }

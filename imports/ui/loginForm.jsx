@@ -14,7 +14,8 @@ export const LoginForm = () => {
 
     return (
       <form className="login-form" onSubmit={handleSubmit}>
-      <label htmlFor="username">Username</label>
+      <div>
+        <label htmlFor="username">Username</label>
         <input 
           type="text"
           placeholder="username"
@@ -33,6 +34,7 @@ export const LoginForm = () => {
         />
 
         <button type="submit">Login</button>
+      </div>
 
       </form>
     )
