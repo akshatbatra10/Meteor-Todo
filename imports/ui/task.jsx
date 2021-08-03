@@ -5,7 +5,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick }) => {
       <li>
         <input
           type="checkbox"
-          checked={task.isChecked}
+          checked={!!task.isChecked}
           onClick={() => onCheckboxClick(task)}
           readOnly
         />
