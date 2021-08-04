@@ -8,6 +8,8 @@ import { LoginForm } from './loginForm.jsx';
 
 export const App = () => {
 
+  const [hideCompleted, setHideCompleted] = useState(false);
+
   const user = useTracker(() => Meteor.user());
 
   const toggleChecked = ({ _id, isChecked }) => {
@@ -17,17 +19,16 @@ export const App = () => {
       }
     });
   }
-
-  const deleteTask = ({ _id }) => {
-    TasksCollection.remove(_id);
-  }
-  const [hideCompleted, setHideCompleted] = useState(false);
-
+  
   const hideCompletedFilter = {isChecked: { $ne: true }}
 
   const userFilter = user ? { userId: user._id } : {};
 
   const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
+
+  const deleteTask = ({ _id }) => {
+    TasksCollection.remove(_id);
+  }
 
   const pendingTasksCount = useTracker(()=> {
     if(!user) return 0;
