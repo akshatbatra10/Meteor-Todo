@@ -13,11 +13,7 @@ export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   const toggleChecked = ({ _id, isChecked }) => {
-    TasksCollection.update(_id, {
-      $set: {
-        isChecked: !isChecked
-      }
-    });
+    Meteor.call('tasks.setIsChecked', _id, isChecked);
   }
   
   const hideCompletedFilter = {isChecked: { $ne: true }}
@@ -27,7 +23,7 @@ export const App = () => {
   const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
 
   const deleteTask = ({ _id }) => {
-    TasksCollection.remove(_id);
+    Meteor.call('tasks.remove', _id);
   }
 
   const pendingTasksCount = useTracker(()=> {

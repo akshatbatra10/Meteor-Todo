@@ -25,7 +25,7 @@ Meteor.methods({
         TasksCollection.remove(taskId);
     },
 
-    'tasks.setIsChecked'(isChecked, taskId) {
+    'tasks.setIsChecked'(taskId, isChecked) {
         check(isChecked, Boolean);
         check(taskId, String);
 
