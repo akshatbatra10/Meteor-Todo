@@ -8,35 +8,46 @@ import { LoginForm } from './loginForm.jsx';
 
 export const App = () => {
 
-  const [hideCompleted, setHideCompleted] = useState(false);
-
   const user = useTracker(() => Meteor.user());
 
-  const toggleChecked = ({ _id, isChecked }) => {
-    Meteor.call('tasks.setIsChecked', _id, isChecked);
-  }
-  
+  const [hideCompleted, setHideCompleted] = useState(false);
+
   const hideCompletedFilter = {isChecked: { $ne: true }}
 
   const userFilter = user ? { userId: user._id } : {};
 
   const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
 
+  const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
+    const noDataAvailable = { tasks: [], pendingTasksCount: 0 };
+    if(!Meteor.user()) return noDataAvailable;
+
+    const handler = Meteor.subscribe('tasks');
+    if(!handler.ready()) {
+      return { ...noDataAvailable, isLoading: true }
+    }
+
+    const tasks = TasksCollection.find(
+      hideCompleted ? pendingOnlyFilter : userFilter,
+      { 
+        sort: { createdAt: -1 } 
+      }
+      ).fetch();
+    
+    const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
+
+    return { tasks, pendingTasksCount }
+  })
+
+  const toggleChecked = ({ _id, isChecked }) => {
+    Meteor.call('tasks.setIsChecked', _id, !isChecked);
+  }
+
   const deleteTask = ({ _id }) => {
     Meteor.call('tasks.remove', _id);
   }
 
-  const pendingTasksCount = useTracker(()=> {
-    if(!user) return 0;
-    return TasksCollection.find(pendingOnlyFilter).count()
-  });
-
   const pendingTaskTitle = `${pendingTasksCount ? ` (${pendingTasksCount})` : ''}`
-
-  const tasks = useTracker(() => {
-    if(!user) return [];
-    return TasksCollection.find(hideCompleted ? pendingOnlyFilter : userFilter, { sort: { createdAt: -1 } }).fetch();
-  });
 
   return(
     <div className="app">
@@ -66,6 +77,8 @@ export const App = () => {
                 {hideCompleted ? 'Show All' : 'Hide Completed'}
               </button>
             </div>
+
+            { isLoading && <div className="loading">Loading...</div> }
 
             <ul className="tasks">
               { tasks.map((task) => <Task key={task._id} task={task} onCheckboxClick={toggleChecked} onDeleteClick={deleteTask} />) }
