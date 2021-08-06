@@ -6,13 +6,13 @@ Meteor.methods({
         check(text, String);
 
         if(!this.userId) {
-            throw new Meteor.error('Not Authorized');
+            throw new Meteor.Error('Not Authorized');
         }
 
-        const task = TasksCollection.findOne({ _id: taskId, userId: this.userId });
+        const task = TasksCollection.findOne({ userId: this.userId });
 
         if (!task) {
-          throw new Meteor.Error('Access denied.');
+          throw new Meteor.Error('Access denied');
         }
 
         TasksCollection.insert({
@@ -26,13 +26,13 @@ Meteor.methods({
         check(taskId, String);
 
         if(!this.userId) {
-            throw new Meteor.error('Not Authorized');
+            throw new Meteor.Error('Not Authorized');
         }
 
         const task = TasksCollection.findOne({ _id: taskId, userId: this.userId });
 
         if (!task) {
-          throw new Meteor.Error('Access denied.');
+          throw new Meteor.Error('Access denied');
         }
 
         TasksCollection.remove(taskId);
@@ -43,13 +43,13 @@ Meteor.methods({
         check(taskId, String);
 
         if(!this.userId) {
-            throw new Meteor.error('Not Authorized');
+            throw new Meteor.Error('Not Authorized');
         }
 
         const task = TasksCollection.findOne({ _id: taskId, userId: this.userId });
 
         if (!task) {
-          throw new Meteor.Error('Access denied.');
+          throw new Meteor.Error('Access denied');
         }
 
         TasksCollection.update(taskId, {
